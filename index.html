@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shops | Ultra-Premium Digital Hub</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberBlack: '#030712',
+                        premiumGlass: 'rgba(255, 255, 255, 0.03)',
+                        borderGlass: 'rgba(255, 255, 255, 0.08)',
+                        neonCyan: '#00f2fe',
+                        neonPurple: '#4facfe',
+                        neonGreen: '#10b981',
+                        neonRed: '#ef4444',
+                        premiumGold: '#f59e0b',
+                        luxuryGray: '#9ca3af'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: radial-gradient(circle at top, #0d1527 0%, #030712 100%);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .font-cyber { font-family: 'Orbitron', sans-serif; }
+        .glass-card {
+            background: rgba(13, 20, 38, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .glass-premium-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .page-view { display: none; }
+        .page-view.active {
+            display: block;
+            animation: premiumScreenFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes premiumScreenFade {
+            from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 254, 0.3); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-24 selection:bg-neonCyan/30">
+
+    <script>
+        // myshops.team@gmail.com থেকে ডেপ্লয় করা নতুন Web App URL-টি শুধুমাত্র নিচের কোটেশনের ভেতরে বসাও
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5t5gPofVtqQyVf7B0cw_Il-JT3ony3f5dkxG5DEfJSRarkxaFf63Uk0kWJT4VlGlo/exec";
+
+        const DIRECT_ADMIN_CONFIG = {
+            email: "admin@myshop.com", 
+            pass: "admin1234"          
+        };
+    </script>
+
+    <!-- হেডার জোন -->
+    <header class="glass-card fixed top-0 left-0 right-0 z-[999] px-4 lg:px-12 py-4 flex justify-between items-center border-b">
+        <div class="cursor-pointer" onclick="navigateTo('home')">
+            <h1 class="text-2xl lg:text-3xl font-cyber font-black tracking-widest bg-gradient-to-r from-neonCyan via-white to-neonPurple bg-clip-text text-transparent">MY SHOPS</h1>
+            <p id="storeDescriptionTag" class="text-[10px] lg:text-xs text-luxuryGray tracking-wide mt-0.5">সবচেয়ে কম মূল্যে eFootball কয়েন কিনুন আপনার বিশ্বাসযোগ্য ‘My Shops’ ওয়েবসাইট থেকে। 🥰</p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <div id="guestPortal" class="flex gap-2">
+                <button onclick="openAuthModal('login')" class="px-4 py-2 text-xs font-bold bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition">লগইন</button>
+                <button onclick="openAuthModal('signup')" class="px-4 py-2 text-xs font-bold bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 rounded-xl font-bold transition transform hover:scale-105">সাইন আপ</button>
+            </div>
+            <div id="userPortal" class="hidden flex items-center gap-3 cursor-pointer" onclick="navigateTo('profile')">
+                <span id="headerProfileName" class="text-xs lg:text-sm font-bold text-slate-300">User</span>
+                <div class="w-9 h-9 rounded-xl border border-neonCyan/30 bg-slate-900 flex items-center justify-center overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=MyShopsCustom" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div id="logoutPortal" class="hidden">
+                <button onclick="executeSystemLogout()" class="p-2 text-xs text-neonRed hover:underline"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="fixed top-[88px] left-0 right-0 bg-[#070b19] border-b border-t border-neonCyan/20 h-12 flex items-center z-40 text-sm lg:text-base font-bold text-white shadow-2xl">
+        <div class="bg-gradient-to-r from-neonRed via-red-600 to-amber-600 text-white px-5 h-full flex items-center font-extrabold tracking-wider shrink-0 shadow-2xl z-10">
+            <i class="fa-solid fa-bolt-lightning mr-2 animate-bounce text-yellow-300"></i>ব্রেকিং নিউজ:
+        </div>
+        <marquee id="breakingNewsTicker" scrollamount="5" class="px-4 text-yellow-300 tracking-wide font-semibold">লোড হচ্ছে...</marquee>
+    </div>
+
+    <main class="flex-grow pt-44 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+        
+        <section id="home-page" class="page-view active">
+            <div class="relative max-w-xl mx-auto mb-8 shadow-2xl">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-4 text-neonCyan/70"></i>
+                <input type="text" id="storeSearchInput" oninput="filterStoreCatalog()" placeholder="আপনার কাঙ্ক্ষিত গেম প্যাক বা কয়েন প্যাকেজটি খুঁজুন..." class="w-full pl-12 pr-5 py-3.5 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-neonCyan focus:ring-1 focus:ring-neonCyan/30 transition text-sm text-slate-200">
+            </div>
+
+            <div class="relative h-40 sm:h-60 lg:h-80 rounded-3xl overflow-hidden mb-12 border border-white/10 bg-slate-950 p-0 shadow-2xl">
+                <div id="dynamicHeroCarousel" class="flex transition-transform duration-700 h-full w-full"></div>
+            </div>
+
+            <h3 class="text-lg lg:text-xl font-bold mb-8 text-white flex items-center gap-2 font-cyber tracking-widest"><span class="w-1.5 h-6 bg-gradient-to-b from-neonCyan to-neonPurple rounded-full"></span> All PACKAGES</h3>
+            <div id="catalogGridDisplay" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"></div>
+        </section>
+
+        <section id="cart-page" class="page-view">
+            <h3 class="text-xl font-bold mb-6 font-cyber tracking-wider"><i class="fa-solid fa-square-check text-neonCyan mr-2"></i> MY SHOPPING CARD</h3>
+            <div id="cartItemsContainer" class="space-y-4 mb-6"></div>
+            <div class="glass-card rounded-2xl p-6 mb-6">
+                <div class="flex justify-between items-center text-slate-400 text-xs sm:text-sm font-medium mb-3">
+                    <span>ওয়েব ভ্যাট (ফিক্সড ২ ৳ প্রতি নির্বাচিত আইটেম)</span>
+                    <span id="cartVatDisplay" class="text-slate-200 font-cyber">0 ৳</span>
+                </div>
+                <div class="w-full h-px bg-white/5 my-3"></div>
+                <div class="flex justify-between items-center font-bold text-lg text-white">
+                    <span>সর্বমোট প্রাইজ (ভ্যাট সহ):</span>
+                    <span id="cartTotalDisplay" class="text-neonCyan font-cyber text-2xl">0 ৳</span>
+                </div>
+            </div>
+            <button onclick="triggerOrderCalculationSequence()" class="w-full py-4 bg-gradient-to-r from-neonCyan via-neonPurple to-blue-600 text-slate-950 font-black tracking-widest uppercase text-sm rounded-xl transition hover:opacity-95 shadow-lg shadow-neonCyan/10">Order Now</button>
+        </section>
+
+        <section id="checkout-loader-page" class="page-view">
+            <div class="flex flex-col justify-center items-center py-24 text-center">
+                <div class="relative w-20 h-20 mb-6">
+                    <div class="absolute inset-0 border-4 border-white/5 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-neonCyan rounded-full animate-spin"></div>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 tracking-wide">সিকিউর গেটওয়ে প্রসেসিং...</h4>
+                <p class="text-xs text-luxuryGray">দয়া করে ৫ সেকেন্ড অপেক্ষা করুন, আপনার ইনভвойস সামারি লক করা হচ্ছে।</p>
+                <div class="w-32 bg-white/5 h-1 rounded-full overflow-hidden mt-4">
+                    <div class="bg-neonCyan h-full w-full animate-[pulse_1s_infinite]"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="checkout-summary-page" class="page-view">
+            <div class="glass-premium-card rounded-3xl p-6 lg:p-8 max-w-lg mx-auto">
+                <h3 class="text-base font-cyber font-bold text-center mb-6 text-neonCyan tracking-widest border-b border-white/5 pb-4">ORDER SUMMARY (AUTO FILLED)</h3>
+                <div id="summaryLockWrapper" class="space-y-4 text-sm mb-6 pb-2"></div>
+                <button onclick="proceedToVerificationForm()" class="w-full py-3.5 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest">Confirm Order</button>
+            </div>
+        </section>
+
+        <section id="checkout-form-page" class="page-view">
+            <div class="glass-premium-card rounded-3xl p-6 lg:p-8 max-w-lg mx-auto">
+                <h3 class="text-lg font-bold mb-6 text-center text-white"><i class="fa-solid fa-shield-halved text-neonPurple mr-2"></i> প্লেয়ার অ্যাকাউন্ট ভেরিফিকেশন ফর্ম</h3>
+                <div class="space-y-4 text-xs lg:text-sm">
+                    <div>
+                        <label class="text-slate-400 block mb-1">১/ নাম (Name)</label>
+                        <input type="text" id="f_name" readonly class="w-full p-3 bg-black/40 border border-white/5 text-slate-400 rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">২/ কয়েনের পরিমাণ (Coins)</label>
+                        <input type="text" id="f_coins" readonly class="w-full p-3 bg-black/40 border border-white/5 text-slate-400 rounded-xl outline-none font-cyber">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">৩/ ই-মেইল (Email)</label>
+                        <input type="email" id="f_email" readonly class="w-full p-3 bg-black/40 border border-white/5 text-slate-400 rounded-xl outline-none">
+                    </div>
+                    <div>
+                        <label class="text-slate-200 font-bold block mb-1">৪/ কোনামি আইডি (Konami ID)</label>
+                        <input type="text" id="f_konami_id" placeholder="Enter Konami Registered Mail" class="w-full p-3 bg-white/5 border border-white/10 text-white rounded-xl outline-none focus:border-neonCyan transition">
+                    </div>
+                    <div>
+                        <label class="text-slate-200 font-bold block mb-1">৫/ কোনামি আইডি পাসওয়ার্ড</label>
+                        <input type="password" id="f_konami_pass" placeholder="Enter Konami Account Password" class="w-full p-3 bg-white/5 border border-white/10 text-white rounded-xl outline-none focus:border-neonCyan transition">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">৬/ এমাউন্ট (Locked Amount)</label>
+                        <input type="text" id="f_amount" readonly class="w-full p-3 bg-black/40 border border-white/5 text-slate-400 rounded-xl outline-none font-cyber">
+                    </div>
+                </div>
+                <button onclick="proceedToPaymentGateway()" class="w-full mt-6 py-3.5 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest">Next</button>
+            </div>
+        </section>
+
+        <section id="checkout-payment-page" class="page-view">
+            <div class="glass-premium-card rounded-3xl p-6 lg:p-8 max-w-lg mx-auto">
+                <h3 class="text-md font-cyber font-bold mb-6 text-center text-white tracking-widest">ESCROW SECURE PAYMENT</h3>
+                
+                <div class="bg-blue-950/20 border border-blue-500/20 p-4 rounded-2xl text-xs lg:text-sm text-blue-200 mb-6 leading-relaxed">
+                    নিচে দেওয়া একount পরিমাণ টাকা <b class="text-white bg-white/10 px-2.5 py-1 rounded font-cyber cursor-pointer active:bg-neonCyan/20 select-all" onclick="navigator.clipboard.writeText('01337260315'); alert('নাম্বার সফলভাবে কপি হয়েছে!')">০১৩৩৭২৬০৩১৫</b> এই নাম্বারে পাঠিয়ে ট্রানজেকশন আইডি দিন ।
+                </div>
+
+                <div class="space-y-4 text-xs lg:text-sm">
+                    <div>
+                        <label class="text-slate-400 block mb-1">১/ এমাউন্ট (Amount)</label>
+                        <input type="text" id="p_lock_amount" readonly class="w-full p-3 bg-black/40 border border-white/5 text-slate-400 rounded-xl outline-none font-cyber">
+                    </div>
+                    <div>
+                        <label class="text-slate-200 font-bold block mb-1">২/ পেমেন্ট মেথড (Payment Method)</label>
+                        <select id="p_method" class="w-full p-3 bg-slate-950 border border-white/10 text-white rounded-xl outline-none focus:border-neonCyan">
+                            <option value="bKash">বিকাশ (bKash Personal)</option>
+                            <option value="Nagad">নগদ (Nagad Personal)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-slate-200 font-bold block mb-1">৩/ ট্রানজেকশন আইডি (Transaction ID)</label>
+                        <input type="text" id="p_txid" placeholder="Eg. TRX9102KLS" class="w-full p-3 bg-white/5 border border-white/10 text-white rounded-xl outline-none focus:border-neonCyan font-cyber uppercase tracking-wider">
+                    </div>
+                    <div>
+                        <label class="text-slate-200 font-bold block mb-1">৪/ টাকা পাঠানো নাম্বারের লাস্ট ৪ ডিজিট</label>
+                        <input type="number" id="p_digits" placeholder="Eg. 4310" class="w-full p-3 bg-white/5 border border-white/10 text-white rounded-xl outline-none focus:border-neonCyan">
+                    </div>
+                </div>
+                <button onclick="commitFinalOrderToCloud()" class="w-full mt-6 py-4 bg-gradient-to-r from-neonCyan via-neonPurple to-emerald-600 text-slate-950 font-black tracking-widest uppercase text-sm rounded-xl shadow-lg shadow-neonCyan/10">Submit Order</button>
+            </div>
+        </section>
+
+        <section id="orders-page" class="page-view">
+            <h3 class="text-xl font-bold mb-6 font-cyber tracking-wider"><span class="w-1.5 h-5 bg-neonPurple rounded-full inline-block mr-2 align-middle"></span> MY TRACKING CHRONOLOGY</h3>
+            <div id="userOrdersLogWrapper" class="space-y-4"></div>
+        </section>
+
+        <section id="profile-page" class="page-view">
+            <div class="glass-card rounded-3xl p-6 lg:p-8 text-center max-w-sm mx-auto border relative shadow-2xl">
+                <div class="w-24 h-24 mx-auto mb-4 border-2 border-neonCyan/40 rounded-2xl overflow-hidden bg-slate-900 p-1">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=MyShopsCustom" class="w-full h-full object-cover rounded-xl">
+                </div>
+                <h4 id="v_name" class="text-lg font-bold text-white">অ্যাকাউন্ট ইউজার</h4>
+                <p id="v_email" class="text-xs text-luxuryGray font-cyber">user@myshops.com</p>
+                <div class="text-left mt-6 pt-4 border-t border-white/5">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">আমার ডেলিভারি ঠিকানা</label>
+                    <p id="v_address" class="text-xs text-slate-300 mt-1 bg-white/5 p-3.5 rounded-xl border border-white/5">ঠিকানা সেট করা হয়নি</p>
+                </div>
+                <button onclick="openProfileEditor()" class="w-full mt-6 py-2.5 bg-white/5 border border-white/10 text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition">ইডিট প্রোফাইল</button>
+            </div>
+        </section>
+
+        <section id="support-page" class="page-view">
+            <div class="glass-card rounded-3xl p-6 lg:p-8 max-w-xl mx-auto text-center shadow-2xl">
+                <div class="w-40 h-40 rounded-3xl mx-auto mb-4 border border-white/10 p-1.5 bg-slate-950 shadow-inner">
+                    <img src="https://api.dicebear.com/7.x/identicon/svg?seed=SajjadAdmin" class="w-full h-full object-cover rounded-2xl">
+                </div>
+                <h4 class="text-xl font-bold text-white tracking-wide">My Shops Support Team</h4>
+                <p class="text-xs text-neonCyan font-cyber font-bold uppercase tracking-widest mt-0.5">Founder & Systems Admin</p>
+                <p class="text-xs lg:text-sm text-slate-400 mt-4 leading-relaxed text-justify bg-white/5 p-4 rounded-xl border border-white/5">
+                    আমাদের গ্রাহক সহায়তা পোর্টালে আপনাকে স্বাগত। কয়েন রিডিম, টপ-আপ ট্রানজেকশন আটকে যাওয়া বা ওটিপি সংক্রান্ত যেকোনো প্রয়োজনে আমাদের সাথে সরাসরি যোগাযোগ করুন। আমরা দ্রুততম সময়ের মধ্যে আপনার সমস্যার সমাধান নিশ্চিত করব।
+                </p>
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                    <a href="https://wa.me/8801337260315" target="_blank" class="flex flex-col items-center p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-2xl text-slate-200 hover:bg-emerald-950/40 transition">
+                        <i class="fa-brands fa-whatsapp text-3xl text-emerald-400 mb-2"></i>
+                        <span class="text-xs font-bold">WhatsApp Support</span>
+                    </a>
+                    <a href="mailto:myshops.team@gmail.com?subject=MY%20SHOPS%20-%20Support%20Request" class="flex flex-col items-center p-4 bg-sky-950/20 border border-sky-500/20 rounded-2xl text-slate-200 hover:bg-sky-950/40 transition">
+                        <i class="fa-solid fa-envelope text-3xl text-sky-400 mb-2"></i>
+                        <span class="text-xs font-bold">Email </span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="forget-password-page" class="page-view">
+            <div class="glass-premium-card rounded-3xl p-6 lg:p-8 max-w-md mx-auto">
+                <h3 class="text-base font-cyber font-bold text-center mb-1 text-premiumGold tracking-widest">PASSWORD RECOVERY PORTAL</h3>
+                <p class="text-[11px] text-luxuryGray text-center mb-6">নিরাপদ ওটিপি ভেরিফিকেশনের মাধ্যমে নতুন পাসওয়ার্ড সেট করুন</p>
+                
+                <div id="otpPhase1">
+                    <label class="text-xs text-slate-400 block mb-1">আপনার নিবন্ধিত ইমেইল ঠিকানা</label>
+                    <input type="email" id="forgetTargetMail" placeholder="example@mail.com" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none mb-4">
+                    <input type="button" id="otpTriggerBtn" onclick="dispatchSecureRecoveryOTP()" value="Get OTP" class="w-full py-3 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest cursor-pointer disabled:opacity-50">
+                </div>
+                <div id="otpPhase2" class="hidden">
+                    <p class="text-xs text-emerald-400 text-center font-medium mb-1"><i class="fa-solid fa-circle-check mr-1"></i> একটি ওটিপি কোড আপনার ইমেইলে পাঠানো হয়েছে</p>
+                    <p class="text-center text-xs text-neonRed font-cyber font-bold mb-3">মেয়াদ বাকি: <span id="otpCountdownClock">01:00</span></p>
+                    <input type="text" id="forgetVerifyOTP" placeholder="৬-ডিজিট কোড দিন" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-center tracking-[0.4em] font-cyber text-white outline-none mb-4">
+                    <button onclick="verifyIncomingRecoveryOTP()" class="w-full py-3 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest">Next</button>
+                    <button onclick="triggerOtpResendFlow()" class="w-full mt-3 text-xs text-luxuryGray hover:text-white underline text-center block">কোড পাইনি? পুনরায় চেষ্টা করুন (Resend OTP)</button>
+                </div>
+                <div id="otpPhase3" class="hidden">
+                    <div class="space-y-3 mb-4">
+                        <input type="password" id="newPass1" placeholder="নতুন পাসওয়ার্ড লিখুন" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                        <input type="password" id="newPass2" placeholder="পাসওয়ার্ড পুনরায় নিশ্চিত করুন" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                    </div>
+                    <button onclick="commitNewSecurePassword()" class="w-full py-3 bg-premiumGold text-slate-950 font-bold rounded-xl text-xs uppercase tracking-widest">Confirm New Password</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-page" class="page-view">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
+                <div>
+                    <h3 class="text-xl font-cyber font-black text-premiumGold tracking-wider">COMMAND CENTER</h3>
+                    <p class="text-xs text-luxuryGray mt-0.5">Authorized Admins Dashboard (Live Execution Node)</p>
+                </div>
+                <button onclick="navigateTo('home')" class="px-4 py-2 bg-neonRed text-white rounded-xl text-xs font-bold uppercase">Exit Core</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-5 space-y-4 text-xs">
+                    <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase">১. অ্যানাউন্समেন্ট ও ব্যানার কন্ট্রোল</h4>
+                    <div>
+                        <label class="text-slate-400 block mb-1">ব্রেকিং নিউজ এডিট</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admTickerField" class="flex-grow p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                            <button onclick="saveTickerBroadcast()" class="px-3 bg-neonCyan text-slate-950 rounded-lg font-bold">Save</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">নতুন স্লাইড ইমেজ URL যোগ</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admBannerField" placeholder="https://" class="flex-grow p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                            <button onclick="pushBannerToPool()" class="px-3 bg-neonPurple text-slate-950 rounded-lg font-bold">Push</button>
+                        </div>
+                        <div id="admBannersList" class="flex flex-wrap gap-2 mt-3"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-5 text-xs lg:col-span-2">
+                    <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-4">২. ক্যাটালগ প্রোডাক্ট ম্যানেজমেন্ট (Add / Edit Mod)</h4>
+                    <input type="hidden" id="adm_p_id">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                        <input type="text" id="adm_p_title" placeholder="পণ্যের নাম (Product Title)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                        <input type="text" id="adm_p_img" placeholder="ইमेज ইউআরএল সোর্স (Image URL)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                        <input type="number" id="adm_p_reg" placeholder="রেগুলার প্রাইস (Regular Price)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                        <input type="number" id="adm_p_avail" placeholder="অ্যাভেইলেবল প্রাইস (Offer Price)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                        <textarea id="adm_p_desc" placeholder="পণ্যের সংক্ষিপ্ত বিবরণ..." class="sm:col-span-2 p-2.5 bg-white/5 border border-white/10 rounded-lg h-16 text-white outline-none resize-none"></textarea>
+                    </div>
+                    <button onclick="saveCatalogProductNode()" class="w-full py-2.5 bg-premiumGold text-slate-950 font-bold rounded-lg uppercase tracking-wide">পণ্য ডাটাবেজে সেভ করুন</button>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 mt-6 text-xs">
+                <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-4">৩. বর্তমান লাইভ পণ্যের তালিকা (Edit & Delete Panel)</h4>
+                <div id="adminLiveCatalogItemsWrapper" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 mt-6 text-xs">
+                <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-4">৪. গ্লোবাল অর্ডার লিস্ট ও লাইভ স্ট্যাটাস মডিфায়ার</h4>
+                <div id="adminMasterLiveQueue" class="space-y-4"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="glass-card fixed bottom-0 left-0 right-0 h-16 z-[999] flex justify-around items-center px-2 border-t rounded-t-3xl">
+        <button onclick="navigateTo('home')" id="nav-btn-home" class="flex flex-col items-center justify-center w-14 cursor-pointer transition-all duration-300 text-slate-500">
+            <i class="fa-solid fa-home text-base sm:text-lg"></i>
+            <span class="text-[10px] mt-1 font-bold">Home</span>
+        </button>
+        <button onclick="navigateTo('cart')" id="nav-btn-cart" class="flex flex-col items-center justify-center w-14 relative cursor-pointer transition-all duration-300 text-slate-500">
+            <i class="fa-solid fa-basket-shopping text-base sm:text-lg"></i>
+            <span class="text-[10px] mt-1 font-bold">My Card</span>
+            <span id="badgeCartCount" class="absolute top-0 right-1 bg-neonCyan text-slate-950 font-cyber font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+        <button onclick="navigateTo('orders')" id="nav-btn-orders" class="flex flex-col items-center justify-center w-14 cursor-pointer transition-all duration-300 text-slate-500">
+            <i class="fa-solid fa-folder-open text-base sm:text-lg"></i>
+            <span class="text-[10px] mt-1 font-bold">My Orders</span>
+        </button>
+        <button onclick="navigateTo('profile')" id="nav-btn-profile" class="flex flex-col items-center justify-center w-14 cursor-pointer transition-all duration-300 text-slate-500">
+            <i class="fa-solid fa-user-gear text-base sm:text-lg"></i>
+            <span class="text-[10px] mt-1 font-bold">Profile</span>
+        </button>
+        <button onclick="navigateTo('support')" id="nav-btn-support" class="flex flex-col items-center justify-center w-14 cursor-pointer transition-all duration-300 text-slate-500">
+            <i class="fa-solid fa-headset text-base sm:text-lg"></i>
+            <span class="text-[10px] mt-1 font-bold">Support</span>
+        </button>
+    </nav>
+
+    <div id="centralAuthModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[30000] hidden flex justify-center items-center p-4">
+        <div class="glass-premium-card w-full max-w-md rounded-3xl p-6 lg:p-8 relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl">&times;</button>
+            
+            <div id="authBoxLogin">
+                <h3 class="text-xl font-bold mb-1 text-center text-white">অ্যাকাউন্টে লগইন করুন</h3>
+                <p class="text-xs text-luxuryGray text-center mb-6">অর্ডার প্লেস করতে আপনার প্রোফাইলে প্রবেশ করুন</p>
+                <div class="space-y-3 mb-4">
+                    <input type="email" id="logEmail" placeholder="আপনার ইমেইল" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                    <input type="password" id="logPass" placeholder="পাসওয়ার্ড" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                </div>
+                <div class="text-right mb-4">
+                    <button onclick="closeAuthModal(); navigateTo('forget-password')" class="text-xs text-neonCyan hover:underline font-medium">পাসওয়ার্ড ভুলে গেছেন?</button>
+                </div>
+                <button onclick="executeAuthenticationLogin()" class="w-full py-3 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-sm mb-4 shadow-md">লগইন</button>
+                <p class="text-xs text-center text-slate-400">নতুন অ্যাকাউন্ট প্রয়োজন? <button onclick="switchAuthFlow('signup')" class="text-neonPurple font-bold hover:underline ml-1">সাইন আপ করুন</button></p>
+            </div>
+
+            <div id="authBoxSignup" class="hidden">
+                <h3 class="text-xl font-bold mb-1 text-center text-white">নতুন অ্যাকাউন্ট তৈরি করুন</h3>
+                <p class="text-xs text-luxuryGray text-center mb-6">নিবন্ধন শেষ করে ইন্সট্যান্ট কেনাকাটা শুরু করুন</p>
+                <div class="space-y-3 mb-5">
+                    <input type="text" id="regName" placeholder="আপনার সম্পূর্ণ নাম" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                    <input type="email" id="regEmail" placeholder="ইমেইল এড্রেস" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                    <input type="password" id="regPass" placeholder="পাসওয়ার্ড দিন" class="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none">
+                </div>
+                <button onclick="executeAuthenticationSignup()" class="w-full py-3 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-sm mb-4">সাইন আপ সম্পন্ন করুন</button>
+                <p class="text-xs text-center text-slate-400">ইতিমধ্যে অ্যাকাউন্ট আছে? <button onclick="switchAuthFlow('login')" class="text-neonCyan font-bold hover:underline ml-1">লগইন</button></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderSuccessAlertPopup" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[50000] hidden flex justify-center items-center p-4">
+        <div class="glass-premium-card w-full max-w-md rounded-3xl p-6 lg:p-8 text-center border-emerald-500/20 border">
+            <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-xl shadow-emerald-500/10">
+                <i class="fa-solid fa-circle-check animate-bounce"></i>
+            </div>
+            <h4 class="text-lg font-bold mb-3 text-white">Your Order has been submitted.</h4>
+            <p class="text-xs lg:text-sm text-slate-400 leading-relaxed text-justify mb-6 font-medium">
+                আমরা আপনার অর্ডার রিসিপ্ট আপনার ই-মেইল এ পাঠিয়ে দিয়েছি চেক করুন। রিসিপ্ট না পেলে আমাদের মেইল এর মেনু থেকে spam এ গিয়ে আমাদের মেইলটি সিলেক্ট করে Three dot মেনুতে ক্লিক করে report not spam করে দিন । 🛑 কারণ পরবর্তী সব আপডেট আপনার ই-মেইল এ পাঠানো হবে।🛑
+            </p>
+            <button onclick="dismissSuccessAlertAndReset()" class="px-8 py-2.5 bg-gradient-to-r from-neonCyan to-neonPurple text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest">OK</button>
+        </div>
+    </div>
+
+    <div id="profileEditModal" class="fixed inset-0 bg-black/80 z-[20000] hidden flex justify-center items-center p-4 backdrop-blur-md">
+        <div class="glass-card w-full max-w-sm rounded-2xl p-5 text-xs">
+            <h4 class="font-bold mb-4 text-slate-300 uppercase border-b border-white/5 pb-2">ইডিট প্রোফাইল ইনফরমেশন</h4>
+            <div class="space-y-3 mb-4">
+                <div>
+                    <label class="text-slate-400 block mb-1">নাম</label>
+                    <input type="text" id="ep_name" class="w-full p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                </div>
+                <div>
+                    <label class="text-slate-400 block mb-1">ই-মেইল</label>
+                    <input type="email" id="ep_email" class="w-full p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                </div>
+                <div>
+                    <label class="text-slate-400 block mb-1">ঠিকানার বিবরণ</label>
+                    <input type="text" id="ep_address" class="w-full p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                </div>
+            </div>
+            <button onclick="commitProfileEditsToSystem()" class="w-full py-2.5 bg-neonCyan text-slate-950 rounded-lg font-bold uppercase tracking-wider">Save Changes</button>
+            <button onclick="document.getElementById('profileEditModal').classList.add('hidden')" class="w-full mt-2 py-2 text-slate-400 text-center hover:underline">Cancel</button>
+        </div>
+    </div>
+
+<script>
+    // Local System State
+    let systemDatabase = JSON.parse(localStorage.getItem('myShopsMasterDataGrid_v3')) || {
+        tickerNews: "My Shops-এ আপনাকে স্বাগত! ই-ফুটবল কয়েন লোডিংসহ যেকোনো গেম টপ-আপ পেয়ে যাচ্ছেন একদম হাই-স্পিড ইনস্ট্যান্ট সিকিউর ডেলিভারিতে।",
+        sliderPool: [
+            "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
+        ],
+        catalog: [
+            {id: 101, title: "130 Coins Standard Mobile Pack", desc: "Instant Delivery Safe Method Coin Recharge Packet", regularPrice: 150, availablePrice: 110, img: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=500&q=80"},
+            {id: 102, title: "530 Coins Advance Loading Bundle", desc: "Official Multidevice Sync Premium Topup Pack", regularPrice: 490, availablePrice: 420, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=500&q=80"},
+            {id: 103, title: "1080 Coins Pro Esports Pack", desc: "Safe Locked Digital Loading eFootball Currency", regularPrice: 950, availablePrice: 950, img: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&w=500&q=80"},
+            {id: 104, title: "2150 Coins Grand Masters Pack", desc: "Ultra Premium Loaded Heavy Currency eFootball Bundle", regularPrice: 1750, availablePrice: 1890, img: "https://images.unsplash.com/photo-1612287230202-1bf1d85d1bdf?auto=format&fit=crop&w=500&q=80"}
+        ],
+        ordersRegistry: []
+    };
+
+    if (!systemDatabase.catalog || systemDatabase.catalog.length === 0) {
+        systemDatabase.catalog = [
+            {id: 101, title: "130 Coins Standard Mobile Pack", desc: "Instant Delivery Safe Method Coin Recharge Packet", regularPrice: 150, availablePrice: 110, img: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=500&q=80"},
+            {id: 102, title: "530 Coins Advance Loading Bundle", desc: "Official Multidevice Sync Premium Topup Pack", regularPrice: 490, availablePrice: 420, img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=500&q=80"},
+            {id: 103, title: "1080 Coins Pro Esports Pack", desc: "Safe Locked Digital Loading eFootball Currency", regularPrice: 950, availablePrice: 950, img: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&w=500&q=80"},
+            {id: 104, title: "2150 Coins Grand Masters Pack", desc: "Ultra Premium Loaded Heavy Currency eFootball Bundle", regularPrice: 1750, availablePrice: 1890, img: "https://images.unsplash.com/photo-1612287230202-1bf1d85d1bdf?auto=format&fit=crop&w=500&q=80"}
+        ];
+        localStorage.setItem('myShopsMasterDataGrid_v3', JSON.stringify(systemDatabase));
+    }
+
+    const certifiedAdmins = ["sajjad@myshops.com", "admin@myshop.com"];
+    let activeSessionUser = JSON.parse(sessionStorage.getItem('myShopsSessionToken_v3')) || null;
+    let localCartInstance = [];
+    let carouselIdx = 0;
+    let otpTargetEmail = ""; 
+    let otpCountdownTimerInstance = null; 
+
+    function persistState() {
+        localStorage.setItem('myShopsMasterDataGrid_v3', JSON.stringify(systemDatabase));
+        compileEngineUI();
+    }
+
+    // UI Builder Thread
+    function compileEngineUI() {
+        document.getElementById('breakingNewsTicker').innerText = systemDatabase.tickerNews;
+
+        const sliderDOM = document.getElementById('dynamicHeroCarousel');
+        if(sliderDOM) {
+            sliderDOM.innerHTML = systemDatabase.sliderPool.map(img => `<img src="${img}" class="w-full h-full object-cover flex-shrink-0">`).join('');
+        }
+
+        const gridDOM = document.getElementById('catalogGridDisplay');
+        if(gridDOM) {
+            gridDOM.innerHTML = systemDatabase.catalog.map(product => {
+                let rateStyleClass = "text-white"; 
+                if(product.availablePrice < product.regularPrice) rateStyleClass = "text-neonGreen font-bold";
+                if(product.availablePrice > product.regularPrice) rateStyleClass = "text-neonRed font-bold";
+
+                return `
+                <div class="glass-card p-4 rounded-3xl flex flex-col justify-between group border border-white/5 transition-all duration-300 relative overflow-hidden hover:border-neonCyan/30">
+                    <div class="absolute inset-0 bg-gradient-to-b from-neonCyan/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="relative rounded-2xl overflow-hidden mb-4 border border-white/5 h-40 bg-slate-900">
+                            <img src="${product.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-xl text-[10px] font-cyber text-neonCyan border border-white/10">DIGITAL PACK</div>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-100 tracking-wide line-clamp-1">${product.title}</h4>
+                        <p class="text-xs text-luxuryGray line-clamp-2 mt-1 leading-relaxed">${product.desc}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/5 text-xs relative z-10">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="text-slate-500 line-through text-[10px] block font-cyber">Reg: ${product.regularPrice} ৳</span>
+                                <span class="text-sm ${rateStyleClass} font-cyber">Avail: ${product.availablePrice} ৳</span>
+                            </div>
+                        </div>
+                        <button onclick="pushToCartRegistry(${product.id})" class="w-full py-2.5 bg-white/5 border border-white/10 hover:bg-gradient-to-r hover:from-neonCyan hover:to-neonPurple hover:text-slate-950 font-black rounded-xl uppercase tracking-widest transition duration-300">Add To Cart</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        if(activeSessionUser) {
+            document.getElementById('guestPortal').classList.add('hidden');
+            document.getElementById('userPortal').classList.remove('hidden');
+            document.getElementById('logoutPortal').classList.remove('hidden'); 
+            document.getElementById('headerProfileName').innerText = activeSessionUser.name;
+            document.getElementById('v_name').innerText = activeSessionUser.name;
+            document.getElementById('v_email').innerText = activeSessionUser.email;
+            document.getElementById('v_address').innerText = activeSessionUser.address || "ঠিকানা বিবরণ সেট করা হয়নি";
+        } else {
+            document.getElementById('guestPortal').classList.remove('hidden');
+            document.getElementById('userPortal').classList.add('hidden');
+            document.getElementById('logoutPortal').classList.add('hidden');
+        }
+
+        document.getElementById('admTickerField').value = systemDatabase.tickerNews;
+        document.getElementById('admBannersList').innerHTML = systemDatabase.sliderPool.map((banner, index) => `
+            <div class="relative w-14 h-10 rounded border border-white/10 overflow-hidden group">
+                <img src="${banner}" class="w-full h-full object-cover">
+                <button onclick="deleteSliderImageNode(${index})" class="absolute inset-0 bg-neonRed/80 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition">&times;</button>
+            </div>
+        `).join('');
+
+        compileCartUI();
+        compileUserOrdersHistoryUI();
+        compileAdminLiveCatalogDashboardList();
+        compileAdminOperationsTerminalUI();
+    }
+
+    function navigateTo(pageId) {
+        if(pageId === 'admin') {
+            if(!activeSessionUser || !certifiedAdmins.includes(activeSessionUser.email)) {
+                alert("অ্যাক্সেস ডিনাইড! আপনি প্রধান এডমিন প্যানেলের অংশ নন।");
+                return;
+            }
+        }
+        document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+        const element = document.getElementById(`${pageId}-page`);
+        if(element) element.classList.add('active');
+        syncActiveNavigationHighlight(pageId);
+        window.scrollTo(0,0);
+    }
+
+    function syncActiveNavigationHighlight(pageId) {
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.classList.remove('text-neonCyan', 'scale-110');
+            btn.classList.add('text-slate-500');
+        });
+        const navBtn = document.getElementById(`nav-btn-${pageId}`);
+        if(navBtn) {
+            navBtn.classList.remove('text-slate-500');
+            navBtn.classList.add('text-neonCyan', 'scale-110');
+        }
+    }
+
+    function openAuthModal(flow) {
+        document.getElementById('centralAuthModal').classList.remove('hidden');
+        switchAuthFlow(flow);
+    }
+    function closeAuthModal() { document.getElementById('centralAuthModal').classList.add('hidden'); }
+    function switchAuthFlow(flow) {
+        document.getElementById('authBoxLogin').classList.add('hidden');
+        document.getElementById('authBoxSignup').classList.add('hidden');
+        if(flow === 'login') document.getElementById('authBoxLogin').classList.remove('hidden');
+        if(flow === 'signup') document.getElementById('authBoxSignup').classList.remove('hidden');
+    }
+
+    function executeAuthenticationSignup() {
+        let name = document.getElementById('regName').value.trim();
+        let email = document.getElementById('regEmail').value.trim();
+        let pass = document.getElementById('regPass').value.trim();
+        if(!name || !email || !pass) return alert("দয়া করে সমস্ত ফিল্ড সঠিকভাবে পূরণ করুন!");
+
+        const formData = new FormData();
+        formData.append("action", "signup");
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", pass);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === "exists") {
+                alert("এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট তৈরি করা আছে!");
+            } else if(res.status === "success") {
+                alert("সাইন আপ সফল হয়েছে! এখন লগইন করুন।");
+                switchAuthFlow('login');
+            }
+        })
+        .catch(err => alert("আপনার নেটওয়ার্ক একদম ধীর। দয়া করে ভালো ইন্টারনেট সংযোগ করুন এবং আবার চেষ্টা করুন।"));
+    }
+
+    function executeAuthenticationLogin() {
+        let email = document.getElementById('logEmail').value.trim();
+        let pass = document.getElementById('logPass').value.trim();
+        
+        if(!email || !pass) return alert("দয়া করে ইমেইল এবং পাসওয়ার্ড দুটিই দিন!");
+
+        if (email === DIRECT_ADMIN_CONFIG.email && pass === DIRECT_ADMIN_CONFIG.pass) {
+            activeSessionUser = { name: "System Admin", email: email, address: "Core Headquarters" };
+            sessionStorage.setItem('myShopsSessionToken_v3', JSON.stringify(activeSessionUser));
+            closeAuthModal();
+            compileEngineUI();
+            navigateTo('admin');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("action", "login");
+        formData.append("email", email);
+        formData.append("password", pass);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === "success") {
+                alert("লগইন সফল হয়েছে!");
+                activeSessionUser = { name: res.data.name, email: res.data.email, address: "" };
+                sessionStorage.setItem('myShopsSessionToken_v3', JSON.stringify(activeSessionUser));
+                
+                closeAuthModal();
+                compileEngineUI();
+
+                if(certifiedAdmins.includes(email)) navigateTo('admin');
+                else navigateTo('home');
+            } else {
+                alert("ভুল ইমেইল অথবা পাসওয়ার্ড! আবার চেষ্টা করুন।");
+            }
+        })
+        .catch(err => alert("দুর্বল ইন্টারনেটের কারণে লগইন করা যায়নি। ইন্টারনেটের স্পিড ভালো হলে আবার চেষ্টা করুন।"));
+    }
+
+    function executeSystemLogout() {
+        activeSessionUser = null;
+        sessionStorage.removeItem('myShopsSessionToken_v3');
+        alert("সফলভাবে লগআউট করা হয়েছে।");
+        compileEngineUI();
+        navigateTo('home');
+    }
+
+    function startOtpCountdownClock() {
+        if(otpCountdownTimerInstance) clearInterval(otpCountdownTimerInstance);
+        
+        let timeLeft = 60; 
+        const display = document.getElementById('otpCountdownClock');
+        
+        otpCountdownTimerInstance = setInterval(() => {
+            timeLeft--;
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            
+            display.innerText = minutes + ":" + seconds;
+            
+            if(timeLeft <= 0) {
+                clearInterval(otpCountdownTimerInstance);
+                alert("আপনার ওটিপি (OTP) কোডটির মেয়াদ শেষ হয়ে গেছে! দয়া করে রি-সেন্ড করুন।");
+                triggerOtpResendFlow();
+            }
+        }, 1000);
+    }
+
+    function triggerOtpResendFlow() {
+        if(otpCountdownTimerInstance) clearInterval(otpCountdownTimerInstance);
+        document.getElementById('forgetVerifyOTP').value = "";
+        document.getElementById('otpPhase2').classList.add('hidden');
+        document.getElementById('otpPhase1').classList.remove('hidden');
+        document.getElementById('otpTriggerBtn').value = "Get OTP Again";
+    }
+
+    function dispatchSecureRecoveryOTP() {
+        let email = document.getElementById('forgetTargetMail').value.trim();
+        if(!email) return alert("ইমেইল আইডি প্রদান করা বাধ্যতামুলক!");
+        
+        otpTargetEmail = email;
+
+        const formData = new FormData();
+        formData.append("action", "sendOTP");
+        formData.append("email", email);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === "success") {
+                alert("আপনার ইমেইলে ১ মিনিট মেয়াদি একটি সিকিউর ওটিপি পাঠানো হয়েছে!");
+                document.getElementById('otpPhase1').classList.add('hidden');
+                document.getElementById('otpPhase2').classList.remove('hidden');
+                document.getElementById('otpCountdownClock').innerText = "01:00";
+                startOtpCountdownClock(); 
+            } else {
+                alert("এই ইমেইলটি ডাটাবেজে নিবন্ধিত নয়!");
+            }
+        })
+        .catch(err => alert("ইন্টারনেট ধীর হওয়ায় OTP পাঠানো সম্ভব হয়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।"));
+    }
+
+    function verifyIncomingRecoveryOTP() {
+        let val = document.getElementById('forgetVerifyOTP').value.trim();
+        if(!val) return alert("ওটিপি কোডটি টাইপ করুন!");
+        
+        const formData = new FormData();
+        formData.append("action", "verifyOTP");
+        formData.append("email", otpTargetEmail);
+        formData.append("otp", val);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === "success") {
+                if(otpCountdownTimerInstance) clearInterval(otpCountdownTimerInstance); 
+                document.getElementById('otpPhase2').classList.add('hidden');
+                document.getElementById('otpPhase3').classList.remove('hidden');
+            } else {
+                alert("ভুল ওটিপি কোড অথবা মেয়াদ শেষ হয়ে গেছে! সঠিক কোডটি দিন।");
+            }
+        })
+        .catch(err => alert("ভেরিফিকেশন এরর!"));
+    }
+
+    function commitNewSecurePassword() {
+        let p1 = document.getElementById('newPass1').value;
+        let p2 = document.getElementById('newPass2').value;
+        if(p1 !== p2) return alert("পাসওয়ার্ড দুটি মেলেনি!");
+        
+        const formData = new FormData();
+        formData.append("action", "updatePassword");
+        formData.append("email", otpTargetEmail);
+        formData.append("password", p1);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === "success") {
+                alert("আপনার পাসওয়ার্ড সফলভাবে পরিবর্তিত হয়েছে। নতুন পাসওয়ার্ড নিয়ে লগইন করুন।");
+                openAuthModal('login');
+            }
+        })
+        .catch(err => alert("সার্ভার আপডেট ব্যর্থ হয়েছে!"));
+    }
+
+    function pushToCartRegistry(productId) {
+        if(!activeSessionUser) {
+            openAuthModal('login');
+            return;
+        }
+        let target = systemDatabase.catalog.find(p => p.id === productId);
+        localCartInstance.push({
+            uniqueCartId: Date.now() + Math.random(),
+            catalogData: target,
+            isSelectedForOrder: true
+        });
+        compileCartUI();
+        alert("পণ্যটি শপিং কার্ডে যুক্ত করা হয়েছে!");
+    }
+
+    function filterStoreCatalog() {
+        let term = document.getElementById('storeSearchInput').value.toLowerCase();
+        document.querySelectorAll('#catalogGridDisplay > div').forEach((card, idx) => {
+            let p = systemDatabase.catalog[idx];
+            if(p && (p.title.toLowerCase().includes(term) || p.desc.toLowerCase().includes(term))) {
+                card.style.display = "flex";
+            } else if(card) {
+                card.style.display = "none";
+            }
+        });
+    }
+
+    function compileCartUI() {
+        const badge = document.getElementById('badgeCartCount');
+        if(localCartInstance.length > 0) {
+            badge.innerText = localCartInstance.length;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+
+        const container = document.getElementById('cartItemsContainer');
+        if(!container) return;
+        if(localCartInstance.length === 0) {
+            container.innerHTML = `<p class="text-xs text-slate-500 text-center py-12">আপনার শপিং কার্ডে কোনো আইটেম সেভ করা নেই।</p>`;
+            document.getElementById('cartVatDisplay').innerText = "0 ৳";
+            document.getElementById('cartTotalDisplay').innerText = "0 ৳";
+            return;
+        }
+
+        let billAccumulator = 0;
+        let vatAccumulator = 0;
+
+        container.innerHTML = localCartInstance.map((node, index) => {
+            if(node.isSelectedForOrder) {
+                billAccumulator += node.catalogData.availablePrice;
+                vatAccumulator += 2; 
+            }
+
+            return `
+            <div class="glass-card p-4 rounded-2xl flex items-center justify-between border border-white/5 text-xs">
+                <div class="flex items-center gap-3.5">
+                    <input type="checkbox" ${node.isSelectedForOrder ? 'checked' : ''} onchange="localCartInstance[${index}].isSelectedForOrder = this.checked; compileCartUI();" class="w-4 h-4 accent-neonCyan rounded cursor-pointer">
+                    <img src="${node.catalogData.img}" class="w-12 h-12 object-cover rounded-xl border border-white/10">
+                    <div>
+                        <h5 class="font-bold text-white tracking-wide">${node.catalogData.title}</h5>
+                        <span class="text-neonCyan font-cyber font-bold mt-0.5 block">${node.catalogData.availablePrice} ৳</span>
+                    </div>
+                </div>
+                <button onclick="localCartInstance.splice(${index},1); compileCartUI();" class="text-slate-500 hover:text-neonRed p-2 transition"><i class="fa-solid fa-trash"></i></button>
+            </div>`;
+        }).join('');
+
+        document.getElementById('cartVatDisplay').innerText = `${vatAccumulator} ৳`;
+        document.getElementById('cartTotalDisplay').innerText = `${billAccumulator + vatAccumulator} ৳`;
+    }
+
+    function triggerOrderCalculationSequence() {
+        let selectedSet = localCartInstance.filter(n => n.isSelectedForOrder);
+        if(selectedSet.length === 0) return alert("অর্ডার করার জন্য কমপক্ষে একটি পণ্য টিকবক্সে সিলেক্ট করুন!");
+        
+        navigateTo('checkout-loader');
+        
+        setTimeout(() => {
+            navigateTo('checkout-summary');
+            let priceSum = selectedSet.reduce((sum, n) => sum + n.catalogData.availablePrice, 0);
+            let vatSum = selectedSet.length * 2;
+            let finalBill = priceSum + vatSum;
+
+            let mergedTitles = selectedSet.map(n => n.catalogData.title).join(', ');
+            let parsedCoinsCount = selectedSet.reduce((sum, current) => {
+                let numbers = current.catalogData.title.match(/\d+/);
+                return sum + (numbers ? parseInt(numbers[0]) : 0);
+            }, 0);
+
+            const summaryDom = document.getElementById('summaryLockWrapper');
+            summaryDom.innerHTML = `
+                <div class="flex justify-between border-b border-white/5 pb-2.5">
+                    <span class="text-slate-400">পণ্যের নাম:</span>
+                    <span class="font-bold text-white text-right max-w-[220px] block line-clamp-2">${mergedTitles}</span>
+                </div>
+                <div class="flex justify-between border-b border-white/5 pb-2.5">
+                    <span class="text-slate-400">কয়েনের পরিমাণ:</span>
+                    <span class="font-bold text-neonPurple font-cyber">${parsedCoinsCount} Coins</span>
+                </div>
+                <div class="flex justify-between border-b border-white/5 pb-2.5">
+                    <span class="text-slate-400">বর্তমান মূল্য:</span>
+                    <span class="font-bold text-white font-cyber">${priceSum} ৳</span>
+                </div>
+                <div class="flex justify-between border-b border-white/5 pb-2.5">
+                    <span class="text-slate-400">ওয়েব ভ্যাট:</span>
+                    <span class="font-bold text-white font-cyber">${vatSum} ৳</span>
+                </div>
+                <div class="flex justify-between pt-2.5 text-base font-bold items-center">
+                    <span class="text-slate-200">মোট মূল্য:</span>
+                    <span class="text-premiumGold font-cyber text-xl">${finalBill} ৳</span>
+                </div>
+            `;
+
+            summaryDom.dataset.titles = mergedTitles;
+            summaryDom.dataset.coins = parsedCoinsCount + " Coins";
+            summaryDom.dataset.amount = finalBill + " ৳";
+        }, 5000);
+    }
+
+    function proceedToVerificationForm() {
+        navigateTo('checkout-form');
+        const dataCache = document.getElementById('summaryLockWrapper').dataset;
+        document.getElementById('f_name').value = activeSessionUser.name;
+        document.getElementById('f_coins').value = dataCache.coins;
+        document.getElementById('f_email').value = activeSessionUser.email;
+        document.getElementById('f_amount').value = dataCache.amount;
+    }
+
+    function proceedToPaymentGateway() {
+        let konamiId = document.getElementById('f_konami_id').value.trim();
+        let konamiPass = document.getElementById('f_konami_pass').value.trim();
+        if(!konamiId || !konamiPass) return alert("অর্ডার সম্পূর্ণ করার জন্য কোনামি আইডি এবং পাসওয়ার্ড দেওয়া বাধ্যতামূলক!");
+        
+        navigateTo('checkout-payment');
+        document.getElementById('p_lock_amount').value = document.getElementById('f_amount').value;
+    }
+
+    function commitFinalOrderToCloud() {
+        let txid = document.getElementById('p_txid').value.trim();
+        let digits = document.getElementById('p_digits').value.trim();
+        let method = document.getElementById('p_method').value;
+        
+        if(!txid || !digits) return alert("পেমেন্ট ট্রানজেকশন আইডি এবং নামবেরের শেষ ৪ ডিজিট সঠিকভাবে দিন!");
+
+        const dataCache = document.getElementById('summaryLockWrapper').dataset;
+        let orderUid = 'MS-ORDER-' + Math.floor(100000 + Math.random() * 900000);
+        let timestampStr = new Date().toLocaleString('bn-BD');
+
+        let orderPayload = {
+            orderId: orderUid,
+            clientName: activeSessionUser.name,
+            email: activeSessionUser.email, 
+            productNames: dataCache.titles,
+            coinsParsed: dataCache.coins,
+            konamiId: document.getElementById('f_konami_id').value,
+            konamiPass: document.getElementById('f_konami_pass').value,
+            amountTotal: dataCache.amount,
+            transactionId: txid,
+            lastDigits: digits,
+            paymentMethod: method,
+            status: 'Checking', 
+            timestamp: timestampStr,
+            imgPlaceholder: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=150&q=80"
+        };
+
+        const formData = new FormData();
+        formData.append("action", "placeOrder");
+        formData.append("orderId", orderPayload.orderId);
+        formData.append("clientName", orderPayload.clientName);
+        formData.append("email", orderPayload.email);
+        formData.append("product", orderPayload.productNames);
+        formData.append("konamiId", orderPayload.konamiId);
+        formData.append("konamiPass", orderPayload.konamiPass);
+        formData.append("amount", orderPayload.amountTotal);
+        formData.append("transactionId", orderPayload.transactionId);
+        formData.append("status", orderPayload.status);
+        formData.append("timestamp", orderPayload.timestamp);
+
+        fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .catch(e => console.error("Google script cloud post deferred"));
+
+        systemDatabase.ordersRegistry.unshift(orderPayload);
+        persistState();
+
+        localCartInstance = localCartInstance.filter(n => !n.isSelectedForOrder);
+        compileCartUI();
+
+        document.getElementById('orderSuccessAlertPopup').classList.remove('hidden');
+    }
+
+    function dismissSuccessAlertAndReset() {
+        document.getElementById('orderSuccessAlertPopup').classList.add('hidden');
+        navigateTo('orders');
+    }
+
+    function compileUserOrdersHistoryUI() {
+        const container = document.getElementById('userOrdersLogWrapper');
+        if(!container) return;
+        let filteredUserSet = systemDatabase.ordersRegistry.filter(o => o.email === activeSessionUser?.email);
+        
+        if(filteredUserSet.length === 0) {
+            container.innerHTML = `<p class="text-xs text-slate-500 text-center py-12">Boundary লাইন: সক্রিয় বা পুরাতন অর্ডার হিস্টরি পাওয়া যায়নি।</p>`;
+            return;
+        }
+
+        container.innerHTML = filteredUserSet.map(order => {
+            let badgeColor = "text-premiumGold"; 
+            if(order.status === "Pending") badgeColor = "text-blue-400";
+            if(order.status === "Complete") badgeColor = "text-neonGreen";
+            if(order.status === "Cancel") badgeColor = "text-neonRed";
+
+            return `
+            <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between border border-white/5 gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="${order.imgPlaceholder}" class="w-12 h-12 object-cover rounded-xl border border-white/10">
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-bold text-white max-w-[240px] line-clamp-1">${order.productNames}</h4>
+                        <p class="text-xs font-cyber text-neonPurple font-bold mt-0.5">${order.amountTotal}</p>
+                        <span class="text-[10px] text-slate-500 block mt-1"><i class="fa-solid fa-clock mr-1"></i> ${order.timestamp}</span>
+                    </div>
+                </div>
+                <div class="text-right flex sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-2 sm:pt-0 border-white/5">
+                    <span class="text-[10px] text-slate-600 font-cyber mb-1 hidden sm:inline">${order.orderId}</span>
+                    <span class="text-xs sm:text-sm font-cyber font-black uppercase tracking-wider ${badgeColor}">${order.status}</span>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function openProfileEditor() {
+        document.getElementById('profileEditModal').classList.remove('hidden');
+        document.getElementById('ep_name').value = activeSessionUser.name;
+        document.getElementById('ep_email').value = activeSessionUser.email;
+        document.getElementById('ep_address').value = activeSessionUser.address || "";
+    }
+    function commitProfileEditsToSystem() {
+        let n = document.getElementById('ep_name').value.trim();
+        let e = document.getElementById('ep_email').value.trim();
+        let a = document.getElementById('ep_address').value.trim();
+        if(!n || !e) return alert("নাম এবং ইমেইল ফিল্ড ফাঁকা রাখা যাবে না!");
+
+        activeSessionUser.name = n;
+        activeSessionUser.email = e;
+        activeSessionUser.address = a;
+        sessionStorage.setItem('myShopsSessionToken_v3', JSON.stringify(activeSessionUser));
+        document.getElementById('profileEditModal').classList.add('hidden');
+        persistState();
+    }
+
+    function saveTickerBroadcast() {
+        let txt = document.getElementById('admTickerField').value.trim();
+        if(txt) {
+            systemDatabase.tickerNews = txt;
+            persistState();
+            alert("ব্রেকিং নিউজ আদেশনামা সফলভাবে আপডেট হয়েছে!");
+        }
+    }
+    function pushBannerToPool() {
+        let url = document.getElementById('admBannerField').value.trim();
+        if(url) {
+            systemDatabase.sliderPool.push(url);
+            persistState();
+            document.getElementById('admBannerField').value = "";
+        }
+    }
+    function deleteSliderImageNode(idx) {
+        systemDatabase.sliderPool.splice(idx, 1);
+        persistState();
+    }
+
+    function saveCatalogProductNode() {
+        let id = document.getElementById('adm_p_id').value;
+        let title = document.getElementById('adm_p_title').value.trim();
+        let img = document.getElementById('adm_p_img').value.trim();
+        let reg = parseInt(document.getElementById('adm_p_reg').value);
+        let avail = parseInt(document.getElementById('adm_p_avail').value);
+        let desc = document.getElementById('adm_p_desc').value.trim();
+
+        if(!title || !reg || !avail) return alert("পণ্যের ডেটা ইনপুট অসম্পূর্ণ!");
+
+        if(id) {
+            let p = systemDatabase.catalog.find(item => item.id == id);
+            if(p) {
+                p.title = title;
+                p.img = img || "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=500&q=80";
+                p.regularPrice = reg;
+                p.availablePrice = avail;
+                p.desc = desc;
+            }
+        } else {
+            systemDatabase.catalog.push({
+                id: Date.now(), title, img: img || "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=500&q=80", regularPrice: reg, availablePrice: avail, desc
+            });
+        }
+        
+        clearCatalogAdminForm();
+        persistState();
+        alert("পণ্য বিবরণী সফলভাবে ডাটাবেজে সেভ করা হয়েছে!");
+    }
+
+    function clearCatalogAdminForm() {
+        document.getElementById('adm_p_id').value = "";
+        document.getElementById('adm_p_title').value = "";
+        document.getElementById('adm_p_img').value = "";
+        document.getElementById('adm_p_reg').value = "";
+        document.getElementById('adm_p_avail').value = "";
+        document.getElementById('adm_p_desc').value = "";
+    }
+
+    function editCatalogProductNode(id) {
+        let p = systemDatabase.catalog.find(item => item.id == id);
+        if(p) {
+            document.getElementById('adm_p_id').value = p.id;
+            document.getElementById('adm_p_title').value = p.title;
+            document.getElementById('adm_p_img').value = p.img;
+            document.getElementById('adm_p_reg').value = p.regularPrice;
+            document.getElementById('adm_p_avail').value = p.availablePrice;
+            document.getElementById('adm_p_desc').value = p.desc;
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+    }
+
+    function deleteCatalogProductNode(id) {
+        if(confirm("আপনি কি নিশ্চিতভাবে পণ্যটি ক্যাটালগ থেকে মুছে ফেলতে চান?")) {
+            systemDatabase.catalog = systemDatabase.catalog.filter(p => p.id != id);
+            persistState();
+            alert("পণ্যটি সফলভাবে মুছে ফেলা হয়েছে!");
+        }
+    }
+
+    function compileAdminLiveCatalogDashboardList() {
+        const container = document.getElementById('adminLiveCatalogItemsWrapper');
+        if(!container) return;
+        
+        if(systemDatabase.catalog.length === 0) {
+            container.innerHTML = `<p class="text-slate-500 col-span-full">ওয়েবসাইটে বর্তমানে কোনো পণ্য নেই।</p>`;
+            return;
+        }
+
+        container.innerHTML = systemDatabase.catalog.map(product => `
+            <div class="p-3 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                    <img src="${product.img}" class="w-10 h-10 object-cover rounded-lg border border-white/10 flex-shrink-0">
+                    <div class="overflow-hidden">
+                        <h5 class="font-bold text-slate-200 truncate">${product.title}</h5>
+                        <span class="text-neonCyan font-cyber font-semibold text-[11px]">${product.availablePrice} ৳</span>
+                    </div>
+                </div>
+                <div class="flex gap-1.5 flex-shrink-0">
+                    <button onclick="editCatalogProductNode(${product.id})" class="p-2 bg-white/5 border border-white/10 rounded-lg text-premiumGold hover:bg-white/10" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="deleteCatalogProductNode(${product.id})" class="p-2 bg-red-950/40 border border-neonRed/20 rounded-lg text-neonRed hover:bg-neonRed/20" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function compileAdminOperationsTerminalUI() {
+        const queue = document.getElementById('adminMasterLiveQueue');
+        if(!queue) return;
+        if(systemDatabase.ordersRegistry.length === 0) {
+            queue.innerHTML = `<p class="text-slate-500">সার্ভার অর্ডার ডাটাবেজ কিউ সম্পূর্ণ খালি রয়েছে।</p>`;
+            return;
+        }
+
+        queue.innerHTML = systemDatabase.ordersRegistry.map(o => `
+            <div class="p-4 bg-black/40 border border-white/5 rounded-2xl space-y-3">
+                <div class="flex justify-between items-center text-slate-200 text-xs sm:text-sm">
+                    <span class="font-bold text-white">${o.clientName} (${o.email})</span>
+                    <span class="text-neonCyan font-cyber font-bold">${o.amountTotal}</span>
+                </div>
+                <p class="text-slate-400 text-[11px] sm:text-xs">TxID: <span class="text-premiumGold font-cyber select-all">${o.transactionId}</span> [${o.paymentMethod}] - Last 4 Digits: ${o.lastDigits}</p>
+                <div class="text-[11px] text-slate-300 bg-white/5 p-3 rounded-xl border border-white/5 space-y-1">
+                    <div><b class="text-neonPurple">Konami ID:</b> ${o.konamiId} | <b>Pass:</b> ${o.konamiPass}</div>
+                    <div><b>Selected Pack:</b> ${o.productNames}</div>
+                </div>
+                <div class="flex justify-between items-center pt-2.5 border-t border-white/5 text-[11px]">
+                    <span class="text-slate-500 font-cyber">${o.timestamp} <b class="ml-2 text-slate-400">ID: ${o.orderId}</b></span>
+                    <select onchange="updateOrderStatusDirectFromWeb('${o.orderId}', this.value)" class="bg-slate-950 text-white rounded-lg p-1.5 border border-white/10 font-bold outline-none focus:border-neonCyan">
+                        <option value="Checking" ${o.status==='Checking'?'selected':''}>Checking</option>
+                        <option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option>
+                        <option value="Complete" ${o.status==='Complete'?'selected':''}>Complete</option>
+                        <option value="Cancel" ${o.status==='Cancel'?'selected':''}>Cancel</option>
+                    </select>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateOrderStatusDirectFromWeb(orderId, targetStatus) {
+        let matchedNode = systemDatabase.ordersRegistry.find(o => o.orderId === orderId);
+        if(matchedNode) {
+            matchedNode.status = targetStatus;
+            persistState();
+            
+            const formData = new FormData();
+            formData.append("action", "updateStatus");
+            formData.append("orderId", orderId);
+            formData.append("status", targetStatus);
+
+            fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === "success") {
+                    alert(`অর্ডারের স্ট্যাটাস সফলভাবে ওয়েবসাইট ও গুগল শিটে আপডেট হয়েছে এবং মেইল পাঠানো হয়েছে!`);
+                }
+            })
+            .catch(e => console.error("Sheet Web App sync error"));
+        }
+    }
+
+    setInterval(() => {
+        const slider = document.getElementById('dynamicHeroCarousel');
+        if(slider && systemDatabase.sliderPool.length > 0) {
+            carouselIdx = (carouselIdx + 1) % systemDatabase.sliderPool.length;
+            slider.style.transform = `translateX(-${carouselIdx * 100}%)`;
+        }
+    }, 4000);
+
+    compileEngineUI();
+
+</script>
+</body>
+</html>
