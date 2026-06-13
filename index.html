@@ -74,7 +74,6 @@
         };
     </script>
 
-    <!-- হেডার জোন -->
     <header class="glass-card fixed top-0 left-0 right-0 z-[999] px-4 lg:px-12 py-4 flex justify-between items-center border-b">
         <div class="cursor-pointer" onclick="navigateTo('home')">
             <h1 class="text-2xl lg:text-3xl font-cyber font-black tracking-widest bg-gradient-to-r from-neonCyan via-white to-neonPurple bg-clip-text text-transparent">MY SHOPS</h1>
@@ -198,7 +197,7 @@
                 <h3 class="text-md font-cyber font-bold mb-6 text-center text-white tracking-widest">ESCROW SECURE PAYMENT</h3>
                 
                 <div class="bg-blue-950/20 border border-blue-500/20 p-4 rounded-2xl text-xs lg:text-sm text-blue-200 mb-6 leading-relaxed">
-                    নিচে দেওয়া একount পরিমাণ টাকা <b class="text-white bg-white/10 px-2.5 py-1 rounded font-cyber cursor-pointer active:bg-neonCyan/20 select-all" onclick="navigator.clipboard.writeText('01337260315'); alert('নাম্বার সফলভাবে কপি হয়েছে!')">০১৩৩৭২৬০৩১৫</b> এই নাম্বারে পাঠিয়ে ট্রানজেকশন আইডি দিন ।
+                    নিচে দেওয়া Ammount পরিমাণ টাকা <b class="text-white bg-white/10 px-2.5 py-1 rounded font-cyber cursor-pointer active:bg-neonCyan/20 select-all" onclick="navigator.clipboard.writeText('01337260315'); alert('নাম্বার সফলভাবে কপি হয়েছে!')">০১৩৩৭২৬০৩১৫</b> এই নাম্বারে পাঠিয়ে ট্রানজেকশন আইডি দিন ।
                 </div>
 
                 <div class="space-y-4 text-xs lg:text-sm">
@@ -305,9 +304,34 @@
                 <button onclick="navigateTo('home')" class="px-4 py-2 bg-neonRed text-white rounded-xl text-xs font-bold uppercase">Exit Core</button>
             </div>
 
+            <div class="glass-card rounded-2xl p-5 mb-6 text-xs">
+                <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-3 text-cyan-400"><i class="fa-solid fa-comments mr-2"></i> ৫. লাইভ কাস্টমার চ্যাট মনিটর পোর্টাল</h4>
+                <div class="bg-slate-950 p-4 rounded-xl border border-white/5 space-y-3">
+                    
+                    <div>
+                        <label class="text-slate-400 block mb-1 font-bold">কাস্টমার সিলেক্ট করুন (Select Customer):</label>
+                        <select id="adminChatUserSelector" onchange="changeAdminActiveChatTarget(this.value)" class="w-full p-2.5 bg-slate-900 border border-white/10 rounded-lg text-white font-semibold outline-none focus:border-cyan-400">
+                            <option value="">로드 হচ্ছে বা কোনো সক্রিয় কাস্টমার নেই...</option>
+                        </select>
+                    </div>
+
+                    <div id="adminChatDisplayPanel" class="h-40 overflow-y-auto space-y-2 text-[11px] border-b border-white/5 pb-3 custom-scrollbar">
+                        <p class="text-slate-500 text-center py-4">কাস্টমার চ্যাট লোড করার জন্য ওপর থেকে যেকোনো একটি ইউজার সিলেক্ট করুন।</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="adminReplyInputField" placeholder="গ্রাহককে সরাসরি রিপ্লাই মেসেজ দিন..." class="flex-grow p-2 bg-white/5 border border-white/10 rounded-lg text-white text-[11px] outline-none focus:border-cyan-400">
+                        <button onclick="dispatchAdminDirectMessage()" class="px-4 bg-gradient-to-r from-cyan-400 to-purple-600 text-slate-950 rounded-lg font-bold tracking-wider hover:opacity-90">SEND</button>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <input type="checkbox" id="adminControlInterventionCheck" onchange="localStorage.setItem('isAdminHandlingChat', this.checked)" class="w-3.5 h-3.5 accent-cyan-400 rounded cursor-pointer">
+                        <label for="adminControlInterventionCheck" class="text-[10px] text-slate-400 select-none cursor-pointer">বট অফ করুন (ম্যানুয়াল হ্যান্ডওভার মোড)</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="glass-card rounded-2xl p-5 space-y-4 text-xs">
-                    <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase">১. অ্যানাউন্समেন্ট ও ব্যানার কন্ট্রোল</h4>
+                    <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase">১.  অ্যানাউন্সমেন্ট ও ব্যানার কন্ট্রোল</h4>
                     <div>
                         <label class="text-slate-400 block mb-1">ব্রেকিং নিউজ এডিট</label>
                         <div class="flex gap-2">
@@ -330,7 +354,7 @@
                     <input type="hidden" id="adm_p_id">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                         <input type="text" id="adm_p_title" placeholder="পণ্যের নাম (Product Title)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
-                        <input type="text" id="adm_p_img" placeholder="ইमेज ইউআরএল সোর্স (Image URL)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
+                        <input type="text" id="adm_p_img" placeholder="ইমেজ ইউআরএল সোর্স (Image URL)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
                         <input type="number" id="adm_p_reg" placeholder="রেগুলার প্রাইস (Regular Price)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
                         <input type="number" id="adm_p_avail" placeholder="অ্যাভেইলেবল প্রাইস (Offer Price)" class="p-2.5 bg-white/5 border border-white/10 rounded-lg text-white outline-none">
                         <textarea id="adm_p_desc" placeholder="পণ্যের সংক্ষিপ্ত বিবরণ..." class="sm:col-span-2 p-2.5 bg-white/5 border border-white/10 rounded-lg h-16 text-white outline-none resize-none"></textarea>
@@ -345,7 +369,7 @@
             </div>
 
             <div class="glass-card rounded-2xl p-5 mt-6 text-xs">
-                <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-4">৪. গ্লোবাল অর্ডার লিস্ট ও লাইভ স্ট্যাটাস মডিфায়ার</h4>
+                <h4 class="font-bold border-b border-white/5 pb-2 text-slate-300 uppercase mb-4">৪. গ্লোবাল অর্ডার লিস্ট ও লাইভ স্ট্যাটাস মডিফায়ার</h4>
                 <div id="adminMasterLiveQueue" class="space-y-4"></div>
             </div>
         </section>
@@ -443,6 +467,55 @@
         </div>
     </div>
 
+    <div id="customChatFloatingBtn" onclick="toggleCustomChatWindow()" class="fixed bottom-24 right-5 w-14 h-14 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-full shadow-lg flex items-center justify-center text-slate-950 text-2xl cursor-pointer z-[40000] transition transform hover:scale-110 active:scale-95">
+        <i class="fa-solid fa-comment-dots animate-pulse"></i>
+        <span id="chatNotificationBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">1</span>
+    </div>
+
+    <div id="customChatWindow" class="fixed bottom-40 right-5 w-[330px] sm:w-[360px] h-[450px] bg-slate-900/95 backdrop-blur-md rounded-3xl z-[40000] hidden flex flex-col overflow-hidden shadow-2xl border border-cyan-500/20">
+        <div class="p-4 bg-gradient-to-r from-slate-950 to-slate-900 border-b border-white/5 flex justify-between items-center">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center relative">
+                    <i class="fa-solid fa-robot text-cyan-400 text-sm"></i>
+                    <span class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full ring-2 ring-slate-950"></span>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-white tracking-wide">My Shops AI</h4>
+                    <p id="chatSupportStatus" class="text-[9px] text-green-400 font-medium">Online • বটের সাথে চ্যাট করুন</p>
+                </div>
+            </div>
+            <button onclick="toggleCustomChatWindow()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <div id="chatMessageDisplayScreen" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-950/80 custom-scrollbar">
+            <div class="flex items-start gap-2 max-w-[80%]">
+                <div class="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] text-cyan-400 flex-shrink-0 border border-white/5"><i class="fa-solid fa-robot"></i></div>
+                <div class="bg-white/5 border border-white/5 text-slate-200 p-2.5 rounded-2xl rounded-tl-none text-xs leading-relaxed">
+                    আসসালামু আলাইকুম! 'My Shops AI' অ্যাসিস্ট্যান্টে আপনাকে স্বাগত। 🥰 আমি আপনাকে কীভাবে সাহায্য করতে পারি? কয়েন রেট বা পেমেন্ট নিয়ে যেকোনো প্রশ্ন করতে পারেন।
+                </div>
+            </div>
+        </div>
+
+        <div id="chatTypingIndicatorNode" class="px-4 py-2 bg-slate-950/80 flex items-center gap-2 text-[10px] text-gray-400 hidden">
+            <span id="typingPartyName">My Shops AI</span> ইজ টাইপিং
+            <span class="flex gap-1 items-center ml-1">
+                <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+            </span>
+        </div>
+
+        <div class="p-3 bg-slate-950 border-t border-white/5 flex items-center gap-2">
+            <input type="text" id="chatInputField" onkeypress="if(event.key === 'Enter') triggerClientMessageDispatch()" placeholder="মেসেজ লিখুন..." class="flex-grow p-2.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white outline-none focus:border-cyan-400 transition">
+            <button onclick="triggerClientMessageDispatch()" class="w-9 h-9 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-xl text-slate-950 flex items-center justify-center text-sm font-bold shadow transition transform active:scale-95 flex-shrink-0">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script>
     // Local System State
     let systemDatabase = JSON.parse(localStorage.getItem('myShopsMasterDataGrid_v3')) || {
@@ -482,7 +555,6 @@
         compileEngineUI();
     }
 
-    // UI Builder Thread
     function compileEngineUI() {
         document.getElementById('breakingNewsTicker').innerText = systemDatabase.tickerNews;
 
@@ -536,13 +608,18 @@
             document.getElementById('logoutPortal').classList.add('hidden');
         }
 
-        document.getElementById('admTickerField').value = systemDatabase.tickerNews;
-        document.getElementById('admBannersList').innerHTML = systemDatabase.sliderPool.map((banner, index) => `
-            <div class="relative w-14 h-10 rounded border border-white/10 overflow-hidden group">
-                <img src="${banner}" class="w-full h-full object-cover">
-                <button onclick="deleteSliderImageNode(${index})" class="absolute inset-0 bg-neonRed/80 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition">&times;</button>
-            </div>
-        `).join('');
+        const admTicker = document.getElementById('admTickerField');
+        if (admTicker) admTicker.value = systemDatabase.tickerNews;
+
+        const admBanners = document.getElementById('admBannersList');
+        if (admBanners) {
+            admBanners.innerHTML = systemDatabase.sliderPool.map((banner, index) => `
+                <div class="relative w-14 h-10 rounded border border-white/10 overflow-hidden group">
+                    <img src="${banner}" class="w-full h-full object-cover">
+                    <button onclick="deleteSliderImageNode(${index})" class="absolute inset-0 bg-neonRed/80 flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition">&times;</button>
+                </div>
+            `).join('');
+        }
 
         compileCartUI();
         compileUserOrdersHistoryUI();
@@ -650,7 +727,7 @@
                 alert("ভুল ইমেইল অথবা পাসওয়ার্ড! আবার চেষ্টা করুন।");
             }
         })
-        .catch(err => alert("দুর্বল ইন্টারনেটের কারণে লগইন করা যায়নি। ইন্টারনেটের স্পিড ভালো হলে আবার চেষ্টা করুন।"));
+        .catch(err => alert("নন-ডেলিভারি এরর বা দুর্বল নেটওয়ার্ক স্পিড!"));
     }
 
     function executeSystemLogout() {
@@ -716,7 +793,7 @@
                 alert("এই ইমেইলটি ডাটাবেজে নিবন্ধিত নয়!");
             }
         })
-        .catch(err => alert("ইন্টারনেট ধীর হওয়ায় OTP পাঠানো সম্ভব হয়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।"));
+        .catch(err => alert("ইন্টারনেট এরর!"));
     }
 
     function verifyIncomingRecoveryOTP() {
@@ -775,7 +852,7 @@
             isSelectedForOrder: true
         });
         compileCartUI();
-        alert("পণ্যটি শপিং কার্ডে যুক্ত করা হয়েছে!");
+        alert("পণ্যটি শপিংカードে যুক্ত করা হয়েছে!");
     }
 
     function filterStoreCatalog() {
@@ -1061,7 +1138,7 @@
         
         clearCatalogAdminForm();
         persistState();
-        alert("পণ্য বিবরণী সফলভাবে ডাটাবেজে সেভ করা হয়েছে!");
+        alert("پণ্য বিবরণী সফলভাবে ডাটাবেজে সেভ করা হয়েছে!");
     }
 
     function clearCatalogAdminForm() {
@@ -1174,6 +1251,352 @@
         }
     }
 
+    // ======================================================= //
+    //          FIREBASE CLOUD DATABASE CONFIGURATION         //
+    // ======================================================= //
+    const firebaseConfig = {
+        databaseURL: "https://myshopschat-default-rtdb.firebaseio.com/" 
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    let clientUserId = localStorage.getItem('chat_user_id');
+    if (!clientUserId) {
+        clientUserId = 'user_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('chat_user_id', clientUserId);
+    }
+
+    // ======================================================= //
+    //         UPGRADED ADVANCED AI CHAT BOT KNOWLEDGE BASE     //
+    // ======================================================= //
+    const AI_BOT_KNOWLEDGE_BASE = {
+        "greetings": {
+            keywords: ["hello", "hi", "assalamualaikum", "salam", "helo", "vai", "brother", "vaia", "broda", "hey", "online", "active", "keu achen", "kew achen", "হ্যালো", "হাই", "সালাম", "আসসালামু আলাইকুম", "ভাই"],
+            response: "আশা করি খুবই ভালো আছেন। 'My Shops AI' এক্সপার্ট অ্যাসিস্ট্যান্টে আপনাকে স্বাগতম। আপনার গেম অ্যাকাউন্টে সুপার ফাস্ট কয়েন লোড করতে আমি সাহায্য করতে পারি। বলুন কী জানতে চান? 🥰"
+        },
+        "gamecoin_error": {
+            keywords: ["coin-ase-ni", "load-hoy-ni", "not-received", "coin-kothay", "পায়নি-কয়েন", "পাবো-কখন", "coin-koi", "কয়েন-কই", "কয়েন-কোথায়", "coin-kothay", "coin-ashe-ni", "coin-ashe-ni", "কয়েন-আসে-най", "কয়েন পাইনাই", "কয়েন আসে নাই"],
+            response: "অর্ডার কমপ্লিট দেখানোর পরও কয়েন না পেলে দয়া করে গেমটি একবার রিস্টার্ট (Restart) দিয়ে চেক করুন, ঠিক হয়ে যাবে ইনশাল্লাহ 🥰। মাঝে মাঝে গেম সার্ভারের কারণে ১-২ মিনিট দেরি হতে পারে। যদি ৫ মিনিটের মধ্যেও না আসে, অর্ডার আইডি এবং যাবতীয় সকল প্রমাণ নিয়ে 'myshops.team@gmail.com' এ রিপোর্ট ই-মেইল করুন। তাহলে খুব শীঘ্রই একটি সুষ্ঠু ও সুন্দর সমাধান পেয়ে যাবেন ইনশাالله 😊।"
+        },
+        "order_process": {
+            keywords: ["order", "how", "kivabe", "kinbo", "buy", "অর্ডার", "কিভাবে", "কিনব", "কেনার নিয়ম", "অর্ডার করব কেমনে"],
+            response: "অর্ডার করা পানির মতো সহজ! ১. প্রথমে হোম পেজে যান। ২. আপনার কাঙ্ক্ষিত প্যাকেজের নিচে 'Add To Cart' করুন। ৩. নিচে 'My Card' মেনু থেকে অর্ডার অ্যামাউন্ট দেখে 'Order Now' চাপুন। ৪. আপনার সঠিক কোনামি আইডি, পাসওয়ার্ড ও ট্রানজেকশন আইডি দিয়ে সাবমিট দিন। সাথে সাথেই আপনার ই-মেইল এ অর্ডার রিসিপ্ট পেয়ে যাবেন 🔥 এবং ৫-৩০ মিনিটে ডেলিভারি ডান! ⚡"
+        },
+        "pricing_rates": {
+            keywords: ["rate", "price", "dam", "koto", "টাকা", "দাম", "কত", "রেট", "প্রাইস"],
+            response: "আমাদের ওয়েবসাইটে প্রতিটি প্যাকেজের একদম লেটেস্ট ডিসকাউন্ট রেট লাইভ শো করা আছে ভাইয়া। বর্তমান অফারে সবচেয়ে কম দামে কয়েন পাচ্ছেন। সরাসরি হোম পেজে গেলেই প্রতিটি প্যাকের নিচে অফার প্রাইজ দেখতে পাবেন।"
+        },
+        "payment_info": {
+            keywords: ["bkash", "nagad", "number", "payment", "pement", "বিকাশ", "নগদ", "নাম্বার", "পেমেন্ট", "টাকা পাঠানো"],
+            response: "আমরা বিকাশ এবং নগদ পার্সোনাল নাম্বারে পেমেন্ট এক্সেপ্ট করি ভাই। আমাদের অফিশিয়াল নম্বরটি হলো: **০১৩ ৩৭২ ৬০৩ ১৫**। অর্ডার সাবমিট করার সময় পেমেন্ট গেটওয়ে স্ক্রিনে নম্বরটি সরাসরি কপি করার শর্টকাট বাটন পেয়ে যাবেন।"
+        },
+        "delivery_time": {
+            keywords: ["delivery", "time", "somoy", "kokhon", "পাব", "ডেলিভারি", "সময়", "কখন পাব"],
+            response: "আমরা ইনস্ট্যান্ট ডেলিভারি দেওয়ার চেষ্টা করি ভাইয়া। অর্ডার প্লেস করার পর সর্বোচ্চ ৫ থেকে ৩০ মিনিটের মধ্যে আপনার গেমিং প্রোফাইলে কয়েন লোড হয়ে যাবে ইনশাআল্লাহ্। আপনি নিচের 'My Orders' পেজ থেকে লাইভ ট্র্যাকিং দেখতে পারবেন।"
+        },
+        "security_trust": {
+            keywords: ["safe", "secure", "hack", "trust", "scam", "নিরাপদ", "হ্যাক", "নিলব", "হারিয়ে যাবে", "trusted", "real", "fake", "id jabe na to", "safe kina", "mar jabe", "haking", "scammer", "palao", "dhoka", "protarona", "100% safe", "নিরাপত্তা", "হ্যাক হবে", "id safe", "বিশ্বাসের জায়গা"],
+            response: "একদম ১০০% নিরাপদ ইন-গেম অফিসিয়াল মেথড ভাইয়া! আমরা থার্ড-পার্টি কোনো হ্যাক কয়েন বা illetetカードিং করি না। তাই আপনার কোনামি গেম অ্যাকাউন্ট ব্যানের বা হ্যাক হওয়ার বিন্দুমাত্র কোনো ঝুঁকি নেই। নিশ্চিন্তে অর্ডার করতে পারেন! 🔐"
+        },
+        "wrong_credentials": {
+            keywords: ["pass", "bhul", "code", "mail", "পাসওয়ার্ড", "ভুল", "কোড", "জিমেইল"],
+            response: "যদি আপনার কোনামি আইডি বা পাসওয়ার্ড ভুল থাকে, তবে এডমিন প্যানেল থেকে আপনার অর্ডারটি 'Checking' বা 'Cancel' করা হবে এবং আপনার ইমেইলে নোটিফিকেশন যাবে। সেক্ষেত্রে সঠিক আইডি পাসওয়ার্ড দিয়ে দয়া করে আবার অর্ডার সাবমিট করবেন।"
+        },
+        "refund_cancellation": {
+            keywords: ["cancel", "batil", "cancellation", "cancle", "cencl", "cancl", "butil", "order-cancel", "ordercancel", "cancel-order", "cancelorder", "batil-koro", "batilkoro", "batil-koren", "batilkoren", "order-batil", "orderbatil", "cancel-korbo", "cancelkorbo", "cancel-my-order", "অর্ডার-বাতিল", "অর্ডারবাতিল", "বাতিল-করো", "বাতিল-করেন", "ক্যান্সেল-করো", "ক্যান্সেল-করেন", "refund", "back", "ferot", "টাকা ফেরত", "রিফান্ড"],
+            response: "যদি কোনো কারিগরি ত্রুটির কারণে আপনার অর্ডারটি সফল না হয় বা আমরা ডেলিভারি দিতে ব্যর্থ হই, তবে আপনার পেমেন্ট করা টাকা ১০০% রিফান্ড বা ব্যাক করে দেওয়া হবে। তবে কিছু নিয়ম অনুসরণ করতে হবে 😊। যেমন: ১. অর্ডার 'pending' স্ট্যাটাসে চলে গেলে টপ আপ প্রসেস শুরু হয়ে যায়, তখন আর ক্যানসেল সম্ভব নয়। ২. অবশ্যই অটো পাঠানো ই-মেইল বা প্রয়োজনীয় প্রমাণ থাকতে হবে।"
+        }
+    };
+
+    let isChatOpen = false;
+    let selectedUserForAdmin = ""; 
+    let currentAdminChatListener = null;
+
+    function toggleCustomChatWindow() {
+        const chatWin = document.getElementById('customChatWindow');
+        isChatOpen = !isChatOpen;
+        if(chatWin) {
+            if(isChatOpen) {
+                chatWin.classList.remove('hidden');
+                document.getElementById('chatNotificationBadge').classList.add('hidden');
+                scrollChatToBottom();
+            } else {
+                chatWin.classList.add('hidden');
+            }
+        }
+    }
+
+    function scrollChatToBottom() {
+        const screen = document.getElementById('chatMessageDisplayScreen');
+        if(screen) screen.scrollTop = screen.scrollHeight;
+    }
+
+    function saveMessageToCloud(userId, msg, sender) {
+        database.ref('chats/' + userId + '/messages').push({
+            sender: sender,
+            text: msg,
+            time: new Date().getTime()
+        });
+        database.ref('chats/' + userId + '/metadata').set({
+            lastMessageTime: new Date().getTime(),
+            userId: userId
+        });
+    }
+
+    function triggerClientMessageDispatch() {
+        const input = document.getElementById('chatInputField');
+        if(!input) return;
+        let text = input.value.trim();
+        if(!text) return;
+
+        saveMessageToCloud(clientUserId, text, 'user');
+        input.value = "";
+
+        let isAdminIntervening = localStorage.getItem('isAdminHandlingChat') === 'true';
+
+        if (!isAdminIntervening) {
+            database.ref('chats/' + clientUserId + '/typing').set({ isTyping: true, name: 'My Shops AI' });
+            
+            setTimeout(() => {
+                let botReply = getAutomatedBotResponse(text);
+                database.ref('chats/' + clientUserId + '/typing').set({ isTyping: false });
+                saveMessageToCloud(clientUserId, botReply, 'bot');
+            }, 2000); 
+        }
+    }
+
+    function renderSingleChatMessage(msg, sender) {
+        const screen = document.getElementById('chatMessageDisplayScreen');
+        if(!screen) return;
+        
+        let formattedMsg = msg.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        let html = "";
+
+        if(sender === 'user') {
+            html = `<div class="flex items-start justify-end w-full"><div class="bg-gradient-to-r from-cyan-400 to-purple-600 text-slate-950 p-2.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] font-medium leading-relaxed shadow">${formattedMsg}</div></div>`;
+        } else {
+            html = `<div class="flex items-start gap-2 max-w-[80%]"><div class="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] text-cyan-400 flex-shrink-0 border border-white/5"><i class="fa-solid fa-robot"></i></div><div class="bg-white/5 border border-white/5 text-slate-200 p-2.5 rounded-2xl rounded-tl-none text-xs leading-relaxed">${formattedMsg}</div></div>`;
+        }
+        screen.insertAdjacentHTML('beforeend', html);
+    }
+
+    database.ref('chats/' + clientUserId + '/messages').on('child_added', (snapshot) => {
+        let data = snapshot.val();
+        renderSingleChatMessage(data.text, data.sender === 'user' ? 'user' : 'bot');
+        scrollChatToBottom();
+    });
+
+    database.ref('chats/' + clientUserId + '/typing').on('value', (snapshot) => {
+        let data = snapshot.val();
+        const target = document.getElementById('typingPartyName');
+        const node = document.getElementById('chatTypingIndicatorNode');
+        if(node && target) {
+            if(data && data.isTyping) {
+                target.innerText = data.name;
+                node.classList.remove('hidden');
+                scrollChatToBottom();
+            } else {
+                node.classList.add('hidden');
+            }
+        }
+    });
+
+    function getAutomatedBotResponse(clientMsg) {
+        let cleanMsg = clientMsg.toLowerCase().replace(/[?,.!_৳$#]/g, " ").replace(/-/g, " ").trim();
+        let collectedResponses = [];
+        let matchedCategories = new Set();
+
+        for (let category in AI_BOT_KNOWLEDGE_BASE) {
+            let keyList = AI_BOT_KNOWLEDGE_BASE[category].keywords;
+            for (let i = 0; i < keyList.length; i++) {
+                let singleKey = keyList[i].replace(/-/g, " ");
+                if (cleanMsg.includes(singleKey)) {
+                    if (!matchedCategories.has(category)) {
+                        matchedCategories.add(category);
+                        collectedResponses.push(AI_BOT_KNOWLEDGE_BASE[category].response);
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (collectedResponses.length > 0) {
+            if (collectedResponses.length === 1) return collectedResponses[0];
+            let mixedResponse = "ভাইয়া, আপনার প্রশ্নগুলোর উত্তর নিচে সুন্দর করে সাজিয়ে দেওয়া হলো:<br><br>";
+            collectedResponses.forEach((resp, index) => {
+                mixedResponse += `<b>${index + 1}️⃣</b> ${resp}<br><br>`;
+            });
+            return mixedResponse;
+        }
+
+        return `দুঃখিত ভাইয়া, আমি আপনার প্রশ্নটি ঠিক বুঝতে পারছি না। 😔 <br><br><b>দ্রুত সাহায্যের জন্য নিচের অপশনগুলো ট্রাই করুন:</b><br>• কয়েন কিনতে চাইলে সরাসরি <b>Home</b> পেজ থেকে প্যাকেজ সিলেক্ট করুন।<br>• পেমেন্ট শেষ হলে ট্রানজেকশন আইডি সাবমিট করুন।<br>• যেকোনো জরুরি সাপোর্টের জন্য আমাদের <b>Support</b> সেকশনে গিয়ে আমাদের WhatsApp নম্বরে যোগাযোগ করুন।`;
+    }
+
+    // ======================================================= //
+    //       অ্যাডমিন প্যানেল মাল্টি-ইউজার চ্যাট লজিক (UPGRADED)   //
+    // ======================================================= //
+    
+    // ১. ডাটাবেজ থেকে সমস্ত সক্রিয় চ্যাটের লিস্ট দিয়ে ড্রপডাউন জেনারেট করা
+    database.ref('chats').on('value', (snapshot) => {
+        const selector = document.getElementById('adminChatUserSelector');
+        if(!selector) return;
+        
+        let allChats = snapshot.val();
+        if(!allChats) {
+            selector.innerHTML = `<option value="">কোনো সক্রিয় কাস্টমার চ্যাট হিস্ট্রি নেই</option>`;
+            return;
+        }
+
+        let userKeys = Object.keys(allChats);
+        
+        // ড্রপডাউন অপশনগুলো রেন্ডার করা (All Chats অপশন সহ)
+        let selectorHTML = `
+            <option value="all_chats" ${selectedUserForAdmin === 'all_chats' ? 'selected' : ''}>📢 All Chats (সবাই একসাথে)</option>
+        `;
+        userKeys.forEach(k => {
+            let isSelected = (selectedUserForAdmin === k) ? 'selected' : '';
+            selectorHTML += `<option value="${k}" ${isSelected}>Customer Node ID: ${k}</option>`;
+        });
+        selector.innerHTML = selectorHTML;
+    });
+
+    // ২. ড্রপডাউন থেকে ইউজার পরিবর্তন করার ফাংশন (All Chats ও সিঙ্গেল চ্যাট রিয়েল-টাইম লিসেনার)
+    function changeAdminActiveChatTarget(userId) {
+        selectedUserForAdmin = userId;
+        const display = document.getElementById('adminChatDisplayPanel');
+        if(!display) return;
+
+        // আগের কোনো অ্যাক্টিভ লিসেনার থাকলে তা অফ করা (যাতে মেমোরি ফ্লাড বা ডাবল লোড না হয়)
+        if (currentAdminChatListener) {
+            database.ref('chats').off('value', currentAdminChatListener);
+            currentAdminChatListener = null;
+        }
+
+        if (!userId) {
+            display.innerHTML = `<p class="text-slate-500 text-center py-4">কাস্টমার চ্যাট লোড করার জন্য ওপর থেকে যেকোনো একটি ইউজার সিলেক্ট করুন।</p>`;
+            return;
+        }
+
+        display.innerHTML = `<p class="text-slate-400 text-center py-4">চ্যাট লোড হচ্ছে...</p>`;
+
+        if (userId === "all_chats") {
+            // ALL CHATS MODE: সব ইউজারের চ্যাট একসাথে মনিটর করা
+            currentAdminChatListener = database.ref('chats').on('value', (snapshot) => {
+                let allChats = snapshot.val();
+                if(!allChats) {
+                    display.innerHTML = `<p class="text-slate-500 text-center py-4">কোনো চ্যাট ডাটা পাওয়া যায়নি।</p>`;
+                    return;
+                }
+
+                let htmlContent = "";
+                Object.keys(allChats).forEach(uId => {
+                    let userMessages = allChats[uId].messages;
+                    if (!userMessages) return;
+
+                    htmlContent += `
+                        <div class="mb-3 p-2 bg-slate-900/80 border border-white/5 rounded-lg">
+                            <div class="text-[10px] text-cyan-400 font-bold mb-1.5 pb-1 border-b border-white/5 flex justify-between">
+                                <span>👤 ID: ${uId}</span>
+                                <span class="text-[9px] bg-cyan-500/20 text-cyan-300 px-1 rounded font-cyber">LIVE VIEW</span>
+                            </div>
+                            <div class="space-y-1">
+                    `;
+
+                    Object.keys(userMessages).forEach(msgId => {
+                        let chat = userMessages[msgId];
+                        if(chat.sender === 'user') {
+                            htmlContent += `<div class="text-left text-cyan-300 py-0.5"><b class="text-slate-400">[Customer]:</b> ${chat.text}</div>`;
+                        } else if(chat.sender === 'bot') {
+                            htmlContent += `<div class="text-left text-slate-500"><b class="text-purple-400">[Bot AI]:</b> ${chat.text}</div>`;
+                        } else {
+                            htmlContent += `<div class="text-left text-amber-400"><b class="text-amber-500">[You/Admin]:</b> ${chat.text}</div>`;
+                        }
+                    });
+
+                    htmlContent += `
+                            </div>
+                        </div>
+                    `;
+                });
+
+                display.innerHTML = htmlContent || `<p class="text-slate-500 text-center py-4">কোনো মেসেজ রেকর্ড নেই।</p>`;
+                display.scrollTop = display.scrollHeight;
+            });
+        } else {
+            // SINGLE CHAT MODE: নির্দিষ্ট একজন ইউজারের চ্যাট মনিটর করা
+            currentAdminChatListener = database.ref('chats').on('value', (snapshot) => {
+                let allChats = snapshot.val();
+                if (selectedUserForAdmin === userId && allChats && allChats[userId]) {
+                    let currentChatObj = allChats[userId];
+                    if(currentChatObj.messages) {
+                        let msgKeys = Object.keys(currentChatObj.messages);
+                        display.innerHTML = msgKeys.map(k => {
+                            let chat = currentChatObj.messages[k];
+                            if(chat.sender === 'user') {
+                                return `<div class="text-left text-cyan-300 py-0.5"><b class="text-slate-400">[Customer]:</b> ${chat.text}</div>`;
+                            } else if(chat.sender === 'bot') {
+                                return `<div class="text-left text-slate-500"><b class="text-purple-400">[Bot AI]:</b> ${chat.text}</div>`;
+                            } else {
+                                return `<div class="text-left text-amber-400"><b class="text-amber-500">[You/Admin]:</b> ${chat.text}</div>`;
+                            }
+                        }).join('');
+                        display.scrollTop = display.scrollHeight;
+                    } else {
+                        display.innerHTML = `<p class="text-slate-500 text-center py-4">এই ইউজারের কোনো মেসেজ রেকর্ড নেই।</p>`;
+                    }
+                }
+            });
+        }
+    }
+
+    // ৩. মেসেজ পাঠানোর ফাংশন (All Chats সিলেক্ট থাকলে ব্রডকাস্ট মেসেজ যাবে)
+    function dispatchAdminDirectMessage() {
+        const input = document.getElementById('adminReplyInputField');
+        if(!input) return;
+        let text = input.value.trim();
+        if(!text) return;
+
+        if(!selectedUserForAdmin) {
+            alert("অনুগ্রহ করে চ্যাট করার জন্য প্রথমে ওপরের ড্রপডাউন থেকে একজন কাস্টমার সিলেক্ট করুন!");
+            return;
+        }
+
+        if (selectedUserForAdmin === "all_chats") {
+            if(!confirm("আপনি কি নিশ্চিত যে এই মেসেজটি ডাটাবেজের সকল সচল কাস্টমারকে একসাথে পাঠাতে চান?")) return;
+            
+            database.ref('chats').once('value', (snapshot) => {
+                let allChats = snapshot.val();
+                if(!allChats) return alert("মেসেজ পাঠানোর মতো কোনো কাস্টমার নেই!");
+
+                Object.keys(allChats).forEach(uId => {
+                    saveMessageToCloud(uId, "[Broadcast]: " + text, 'admin');
+                });
+                input.value = "";
+            });
+        } else {
+            saveMessageToCloud(selectedUserForAdmin, text, 'admin');
+            input.value = "";
+            database.ref('chats/' + selectedUserForAdmin + '/typing').set({ isTyping: false });
+        }
+    }
+
+    const adminInput = document.getElementById('adminReplyInputField');
+    if(adminInput) {
+        adminInput.addEventListener('input', () => {
+            if(selectedUserForAdmin && selectedUserForAdmin !== "all_chats") {
+                if(adminInput.value.length > 0) {
+                    database.ref('chats/' + selectedUserForAdmin + '/typing').set({ isTyping: true, name: 'Admin/Owner' });
+                } else {
+                    database.ref('chats/' + selectedUserForAdmin + '/typing').set({ isTyping: false });
+                }
+            }
+        });
+        adminInput.addEventListener('blur', () => {
+            if(selectedUserForAdmin && selectedUserForAdmin !== "all_chats") database.ref('chats/' + selectedUserForAdmin + '/typing').set({ isTyping: false });
+        });
+    }
+
     setInterval(() => {
         const slider = document.getElementById('dynamicHeroCarousel');
         if(slider && systemDatabase.sliderPool.length > 0) {
@@ -1182,8 +1605,11 @@
         }
     }, 4000);
 
+    // সিস্টেম ডিরেক্ট রেন্ডার ও ডিফল্ট লিসেনার সেট করা
     compileEngineUI();
-
+    setTimeout(() => {
+        changeAdminActiveChatTarget("all_chats");
+    }, 800);
 </script>
 </body>
 </html>
